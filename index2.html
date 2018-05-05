@@ -1,0 +1,107 @@
+ <html>
+    <head>
+        <meta charset="UTF-8">    
+		<title>Shoot Training</title>
+        <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>          
+        <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.13.1/dist/aframe-extras.min.js"></script>
+        <script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.1.1/dist/aframe-physics-system.min.js"></script>
+		<script src="gun.component.js"></script>
+		<script src="forward.component.js"></script>
+	</head>
+    <body style="background: #131212; margin: 0;">
+		<a-scene  raycaster="far: 100; objects: .intersectable"  embedded physics preloader>
+			<a-assets>
+                 <a-image id="groundTexture" src="assets/grass.jpg"></a-image>
+				 <a-image id="woodTexture" src="assets/wood.jpg"></a-image>
+				 <a-image id="skyTexture" src="assets/sky.jpg"></a-image>
+				 <a-image id="blockTexture" src="assets/block.jpg"></a-image>
+			</a-assets>
+			<a-entity id="user" position="0 3.65 0" rotation="-6.5 -148 0" camera="userHeight: 1.6" gun universal-controls >
+				<a-entity cursor position="0 0 -1" geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015" material="color: black; shader: flat"></a-entity>
+			</a-entity>
+			
+	<!--Target1 -->
+		<a-entity id="Target1" position="34 0 17" rotation="0 -120 0">	
+			<a-box static-body width="14" height="2" depth="0.5" color="green" position="0 2 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="white" position="-6 4 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="red" 	 position="-2 4 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="white" position="2 4 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="red"   position="6 4 0"></a-box>
+			<a-text align="center" color="black"  width="40" position="0 2 0.76" value="Press 'E' to shoot" ></a-text>
+			<a-box static-body width="14" height="2" depth="0.5" color="green" position="0 7 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="red" position="-6 9 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="white" position="-2 9 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="red" position="2 9 0"></a-box>
+            <a-box dynamic-body="mass: 1" width="2" height="2" depth="0.5" color="white" position="6 9 0"></a-box>
+			<a-text align="center" color="black"  width="40" position="0 7 0.76" value="Target 1" ></a-text>
+			<a-box static-body width="14" height="10" depth="0.5" material="opacity:0"  position="0 6 0.5"></a-box>
+		</a-entity>	
+	<!--End Target1 -->
+
+	<!--Target2 -->
+		<script>
+			AFRAME.registerComponent('target', {
+			init: function () {
+			this.el.addEventListener('mousedown', function () {
+			document.getElementById('t2').setAttribute('depth', '0.05');
+		
+				function pass(i) {
+				return function () {
+				var Target3 = document.getElementById("Target2");
+				var boxe = document.createElement('a-cylinder');
+				boxe.setAttribute('dynamic-body', 'sphereRadius: 0.8; mass: 0.1');
+				boxe.setAttribute('class', 'wall');
+				boxe.setAttribute('color', '#079BE5');
+				boxe.setAttribute('height', '0.3');
+				boxe.setAttribute('radius', '0.8');
+				boxe.setAttribute('rotation', '0 90 90');
+				boxe.setAttribute('position', '20 3.65 0');
+				boxe.setAttribute('velocity', '-15 0 0');
+				boxe.setAttribute('material', 'roughness:0.8');
+				Target3.appendChild(boxe);
+				setTimeout(function() {
+				Target3.removeChild(boxe);
+				}, 4000);
+				}
+			}
+			for(var i = 1; i <= 10; i++) {
+			setTimeout(pass(i), i * 4000);
+			}
+			});
+			this.el.addEventListener('mouseup', function () {
+				document.getElementById('t2').setAttribute('depth', '0.15');
+			});
+			}  
+		});
+	  
+	</script>
+	<a-entity id="Target2" position="0 0 30">
+		<a-box static-body width="50" height="2" depth="2" material="color: #999; src: #blockTexture; repeat: 10 0.5; roughness: 1.0"  position="0 2 0"></a-box>
+		<a-box  width="5" height="4" depth="2" material="color: #999; src: #blockTexture; repeat: 1 1; roughness: 1.0"  position="22.5 5 0"></a-box>
+		<a-box  width="5" height="4" depth="2" material="color: #999; src: #blockTexture; repeat: 1 1; roughness: 1.0"  position="-22.5 5 0"></a-box>
+		<a-box static-body width="50" height="2" depth="2" material="color: #999; src: #blockTexture; repeat: 10 0.5; roughness: 1.0"  position="0 8 0"></a-box>
+		<a-text align="center" color="black"  width="40" position="0 8 -1.1" rotation="0 -180 0" value="Target 2" ></a-text>
+		<a-box static-body width="50" height="8" depth="0.5" material="opacity:0"  position="0 5 -1"></a-box>
+	</a-entity>
+	<a-entity id="control2" position="-3 4 5">	
+	<a-box  width="1.5" height="1" depth="0.1" material="color: #999; roughness: 1.0" rotation="40 0 0" position="0 0 0">
+		<a-plane  position="0 0.24 -0.055" rotation="0 -180 0" height="0.4" width="0.4" color="#000000">
+		<a-box target id="t2" class="intersectable" position="0 0 0.05" depth="0.15" height="0.3" width="0.3" color="#E21D2D"></a-box>
+		</a-plane>
+		<a-text align="center" color="black"  width="5" position="0 -0.2 -0.055" rotation="0 -180 0" value="Push to start " ></a-text>	
+	</a-box>
+	</a-entity>
+	<!--End Target2 -->
+
+			<!-- Ground -->
+			<a-cylinder static-body radius="40" height="2" material="color: #fff; src: #groundTexture; repeat: 16 16;  roughness: 1.0" ></a-cylinder>
+			<a-box  static-body width="14" height="1" depth="10" material="color: #fff; src: #woodTexture; repeat: 1 1;  roughness: 1.0" position="0 1.5 0" ></a-box>
+			
+			<!-- Sky -->
+			<a-entity id="sky" geometry="primitive: sphere; radius: 100" material="color: #fff; src: #skyTexture;  shader: flat; side: back"></a-entity>
+			<a-entity id="light" position="-7 7 0" light="type: point; color: #ffffff; intensity: 1"></a-entity>
+            <a-entity id="light" position="7 7 0" light="type: point; color: #ffffff; intensity: 1"></a-entity>
+		</a-scene>
+       
+	</body>
+</html>
